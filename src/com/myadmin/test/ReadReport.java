@@ -39,7 +39,7 @@ public class ReadReport {
             } catch (IOException e) {
                 e.getMessage();
             }
-            System.out.println(createCSVMap((HashMap<String, ArrayList<String>>) resultMap));
+            System.out.println(createOutputFile((HashMap<String, ArrayList<String>>) resultMap));
 
         }
         else{
@@ -80,7 +80,7 @@ public class ReadReport {
         return range;
     }
 
-    public static String createCSVMap(HashMap<String, ArrayList<String>> map) throws IOException {
+    public static String createOutputFile(HashMap<String, ArrayList<String>> map) throws IOException {
         String file = null;
         int i = 0;
         Scanner sc = new Scanner(System.in); //System.in is a standard input stream
