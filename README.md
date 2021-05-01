@@ -1,6 +1,8 @@
 # CustomerDataReportGeneration
 
 **PROBLEM STATEMENT:**
+
+
 A supermarket owner has decided to understand the visiting pattern of his customers. To do this, he assigned a unique id to each customer. Set the visit count of each customer to 0. Now every time a customer visits the shop, he increments the visit count of the customer by 1. He performed this job for a quarter of the year and the collected the data.
 Now, the owner needs your help to group the customers with respect to their visit count. You are provided with the data in CSV format with first row as the header, and the following rows indicates the customer's id and their visit count. You have to read the data from the file and group the customers into buckets of 
 0 - 1000, 
@@ -16,6 +18,7 @@ Now, the owner needs your help to group the customers with respect to their visi
 2- Take range dynamically
 
 **IMPLEMETION:**
+
 
 This project is implemented by using core java concepts. Below are the Implementation steps:
 
