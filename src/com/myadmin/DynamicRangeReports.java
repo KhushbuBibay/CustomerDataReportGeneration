@@ -5,18 +5,17 @@ import java.util.*;
 
 public class DynamicRangeReports {
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) {
 
         File file = new File("user_visit_data.csv");
 
         Map<String, Integer> resultMap = new HashMap<>();
-//        Map<String, ArrayList<String>> output = new HashMap<>();
         ArrayList<String> range = new ArrayList<>();
 
         if (file.exists()) {
-            //Fetching range and user data from file
-            try (FileInputStream fileInputStream = new FileInputStream(file);Scanner scanner = new Scanner(fileInputStream);) {
-
+            // Fetching range and user data from file
+            try (FileInputStream fileInputStream = new FileInputStream(file);
+                    Scanner scanner = new Scanner(fileInputStream);) {
 
                 scanner.nextLine();
 
@@ -30,10 +29,18 @@ public class DynamicRangeReports {
                         range.add(getString(arr[2]));
                     }
                 }
+
+                String message = createOutputFile(findRangeValues(range, resultMap));
+
+                System.out.println(message);
+
             } catch (IOException e) {
-                e.getMessage();
+            
+                System.out.println("Error with file."+" "+e.getLocalizedMessage());
+            
+            }catch(Exception e){
+                System.out.println("Error occured:"+" "+e.getLocalizedMessage());
             }
-            System.out.println(createOutputFile((HashMap<String, ArrayList<String>>) findRangeValues(range, resultMap)));
         } else {
             System.out.println("File does not exist");
         }
@@ -44,7 +51,8 @@ public class DynamicRangeReports {
         return ss;
     }
 
-    public static Map<String, ArrayList<String>> findRangeValues(ArrayList<String> range, Map<String, Integer> resultMap) {
+    private static Map<String, ArrayList<String>> findRangeValues(ArrayList<String> range,
+            Map<String, Integer> resultMap) {
         Map<String, ArrayList<String>> output = new HashMap<>();
         for (Map.Entry<String, Integer> str : resultMap.entrySet()) {
             for (String ran : range) {
@@ -65,54 +73,50 @@ public class DynamicRangeReports {
         return output;
     }
 
-    public static String createOutputFile(HashMap<String, ArrayList<String>> map) throws IOException {
-        String file = null;
-        int i = 0;
-        Scanner sc = new Scanner(System.in); //System.in is a standard input stream
-        System.out.print("Please select the file format : 1. csv , 2. txt ");
-        String str = sc.nextLine();
-        if (str.equals("1")) {
+    public static String createOutputFile(Map<String, ArrayList<String>> map) throws IOException {
+        String message = "";
+        String str = "";
+        try (Scanner sc = new Scanner(System.in);) { // System.in is a standard input stream
+            System.out.print("Please select the file format : 1. csv , 2. txt ");
+            str = sc.nextLine();
 
-            File outputFile = new File("dataCSV.csv");
-            if (outputFile.exists()) {
-                outputFile.delete();
-            }
-
-            for (Map.Entry<String, ArrayList<String>> string2 : map.entrySet()) {
-                try (FileWriter writer = new FileWriter("dataCSV.csv", true);) {
-
-                    writer.write(string2.getKey());
-                    writer.write(",");
-                    for (String s : string2.getValue()) {
-                        writer.write(s + ",");
-                    }
-                    writer.write("\n");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            file = "CSV File created";
-        } else if (str.equals("2")) {
-            File outputFile = new File("dataCSV.txt");
-            if (outputFile.exists()) {
-                outputFile.delete();
-            }
-            for (Map.Entry<String, ArrayList<String>> string2 : map.entrySet()) {
-
-                try (FileWriter writer = new FileWriter("dataCSV.txt", true);) {
-
-                    writer.write(string2.getKey() + "\n" + string2.getValue());
-                    writer.write("\n\n");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            file = "Text File created";
-        } else {
-            System.out.println("Please Enter Correct Value");
-            System.exit(0);
         }
-        return file;
+        String outputFileFormat;
+        String fileName;
+
+        switch (str) {
+            case "1":
+                outputFileFormat = "csv";
+                fileName = "output.csv";
+                break;
+            case "2":
+                outputFileFormat = "txt";
+                fileName = "output.txt";
+                break;
+            default:
+                throw new RuntimeException("Please enter correct value.");
+        }
+
+        File outputFile = new File(fileName);
+        if (outputFile.exists()) {
+            outputFile.delete();
+        }
+
+        try (FileWriter writer = new FileWriter(outputFile, true);) {
+            String separater = outputFileFormat.equalsIgnoreCase("csv") ? "," : "\n";
+            for (Map.Entry<String, ArrayList<String>> string2 : map.entrySet()) {
+
+                writer.write(string2.getKey());
+                writer.write(separater);
+                for (String s : string2.getValue()) {
+                    writer.write(s + separater);
+                }
+                writer.write("\n");
+
+            }
+        }
+        message = outputFileFormat + " file created";
+        return message;
     }
+
 }
