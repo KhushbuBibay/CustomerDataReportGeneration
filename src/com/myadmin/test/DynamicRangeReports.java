@@ -10,14 +10,14 @@ public class DynamicRangeReports {
         File file = new File("user_visit_data.csv");
 
         Map<String, Integer> resultMap = new HashMap<>();
-        Map<String, ArrayList<String>> output = new HashMap<>();
-        ArrayList<String> range = new ArrayList();
+//        Map<String, ArrayList<String>> output = new HashMap<>();
+        ArrayList<String> range = new ArrayList<>();
 
         if (file.exists()) {
             //Fetching range and user data from file
-            try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            try (FileInputStream fileInputStream = new FileInputStream(file);Scanner scanner = new Scanner(fileInputStream);) {
 
-                Scanner scanner = new Scanner(fileInputStream);
+
                 scanner.nextLine();
 
                 while (scanner.hasNextLine()) {
