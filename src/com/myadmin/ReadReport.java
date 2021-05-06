@@ -1,4 +1,4 @@
-package com.myadmin.test;
+package com.myadmin;
 
 import java.io.*;
 import java.util.*;
